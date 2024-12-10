@@ -3,10 +3,8 @@
 #include <fstream>
 #include <curl/curl.h>
 #include <gumbo.h>
-#include <nlohmann/json.hpp>
 
 using namespace std;
-using json = nlohmann::json;
 
 namespace WebParser {
 
@@ -52,6 +50,15 @@ namespace WebParser {
         return "";
     }
 
+    // Функция для форматирования данных в JSON вручную
+    string formatToJson(const string& url, const string& searchText, const string& foundText) {
+        string json = "{\n";
+        json += "  \"url\": \"" + url + "\",\n";
+        json += "  \"search_text\": \"" + searchText + "\",\n";
+        json += "  \"found_text\": \"" + foundText + "\"\n";
+        json += "}";
+        return json;
+    }
 }
 
 int main() {
@@ -71,16 +78,13 @@ int main() {
     string foundText = searchForText(output->root, searchText);
     gumbo_destroy_output(&kGumboDefaultOptions, output);
 
-    // Формирование JSON-объекта
-    json jsonObj;
-    jsonObj["url"] = url;
-    jsonObj["search_text"] = searchText;
-    jsonObj["found_text"] = foundText;
+    // Формирование JSON вручную
+    string jsonStr = formatToJson(url, searchText, foundText);
 
     // Запись в файл JSON
     ofstream outFile("result.json");
     if (outFile.is_open()) {
-        outFile << jsonObj.dump(4); // Красивый вывод с отступом в 4 пробела
+        outFile << jsonStr;
         outFile.close();
         cout << "Результат записан в result.json" << endl;
     }
