@@ -50,7 +50,7 @@ namespace WebParser {
         return "";
     }
 
-    // Функция для форматирования данных в JSON вручную
+    // Функция для форматирования данных в JSON 
     string formatToJson(const string& url, const string& searchText, const string& foundText) {
         string json = "{\n";
         json += "  \"url\": \"" + url + "\",\n";
